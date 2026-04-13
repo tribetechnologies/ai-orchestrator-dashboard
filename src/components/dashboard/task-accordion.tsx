@@ -36,6 +36,27 @@ function TaskStatusBadge({ status }: { status: TaskStatus }) {
   );
 }
 
+// ─── Status Dot ─────────────────────────────────────────────────────────────
+
+const TASK_STATUS_DOT_COLORS: Record<TaskStatus, string> = {
+  completed: 'bg-chart-4',
+  in_progress: 'bg-secondary',
+  pending: 'bg-muted-foreground',
+  failed: 'bg-destructive',
+  blocked: 'bg-muted-foreground',
+};
+
+function TaskStatusDot({ status }: { status: TaskStatus }) {
+  return (
+    <span className="relative flex h-2.5 w-2.5 shrink-0">
+      {status === 'in_progress' && (
+        <span className={cn('animate-ping absolute inline-flex h-full w-full rounded-full opacity-75', TASK_STATUS_DOT_COLORS[status])} />
+      )}
+      <span className={cn('relative inline-flex rounded-full h-2.5 w-2.5', TASK_STATUS_DOT_COLORS[status])} />
+    </span>
+  );
+}
+
 // ─── Phase Status Icons ─────────────────────────────────────────────────────
 
 const PHASE_STATUS_ICONS: Record<string, React.ElementType> = {
@@ -66,12 +87,12 @@ function TaskRow({ task, onSelect }: TaskRowProps) {
           </p>
         )}
       </div>
-      <TaskStatusBadge status={task.status} />
-      {task.tokenUsage && (
-        <span className="text-xs text-foreground whitespace-nowrap">
-          {formatCost(task.tokenUsage.costUsd)}
+      <div className="flex items-center gap-3 shrink-0">
+        <TaskStatusDot status={task.status} />
+        <span className="w-14 text-xs text-foreground tabular-nums font-semibold">
+          {formatCost(task.tokenUsage?.costUsd ?? 0)}
         </span>
-      )}
+      </div>
       <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
     </button>
   );
@@ -139,20 +160,24 @@ export function TaskAccordion({ phases, steps, tasks, agents, onSelectTask, onSe
         return (
           <AccordionItem key={itemValue} value={itemValue} className="bg-muted/40 rounded-lg px-1 mb-2 border border-border/50">
             <AccordionTrigger className="px-3 py-3">
-              <div className="flex items-center gap-2.5">
-                <Icon className={cn('h-5 w-5', iconStyle)} />
-                <span className="font-semibold text-base">{phase.label}</span>
-                <Badge variant="outline" className={cn('text-xs', PHASE_STATUS_BADGE_STYLES[phase.status])}>
-                  {phase.status === 'done' ? 'Completed' : capitalize(phase.status)}
-                </Badge>
-                {hasSubtasks && (
-                  <span className="text-sm text-muted-foreground">
-                    ({tasks.filter((t) => t.status === 'completed').length}/{tasks.length})
+              <div className="flex items-center w-full">
+                <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                  <Icon className={cn('h-5 w-5 shrink-0', iconStyle)} />
+                  <span className="font-semibold text-base">{phase.label}</span>
+                  {hasSubtasks && (
+                    <span className="text-sm text-muted-foreground">
+                      ({tasks.filter((t) => t.status === 'completed').length}/{tasks.length})
+                    </span>
+                  )}
+                </div>
+                <div className="flex items-center gap-3 shrink-0">
+                  <Badge variant="outline" className={cn('text-xs', PHASE_STATUS_BADGE_STYLES[phase.status])}>
+                    {phase.status === 'done' ? 'Completed' : capitalize(phase.status)}
+                  </Badge>
+                  <span className="w-14 text-xs text-foreground tabular-nums font-semibold mr-4">
+                    {formatCost(getPhaseCost(phase, stepTasksMap, agents))}
                   </span>
-                )}
-                <span className="ml-auto text-xs text-foreground tabular-nums pr-2">
-                  {formatCost(getPhaseCost(phase, stepTasksMap, agents))}
-                </span>
+                </div>
               </div>
             </AccordionTrigger>
             <AccordionContent className="px-1 pb-2">
@@ -170,16 +195,21 @@ export function TaskAccordion({ phases, steps, tasks, agents, onSelectTask, onSe
                 </div>
               ) : mainTask ? (
                 <button
-                  onClick={() => phase.stepId && onSelectPhase(phase.stepId)}
+                  onClick={() => onSelectPhase(phase.stepId ?? phase.label)}
                   className={cn(
                     'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors',
                     'bg-muted/80 hover:bg-accent-foreground/5 border border-border/40 transition-colors duration-200'
                   )}
                 >
-                  <div className="flex-1">
-                    <span>{mainTask.title}</span>
+                  <div className="flex-1 min-w-0">
+                    <span className="truncate">{mainTask.title}</span>
                   </div>
-                  <TaskStatusBadge status={mainTask.status} />
+                  <div className="flex items-center gap-3 shrink-0">
+                    <TaskStatusBadge status={mainTask.status} />
+                    <span className="w-14 text-xs text-foreground tabular-nums font-semibold">
+                      {formatCost(mainTask.cost)}
+                    </span>
+                  </div>
                   <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
                 </button>
               ) : null}

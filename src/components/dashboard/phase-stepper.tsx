@@ -21,14 +21,14 @@ function PhaseStep({ phase }: { phase: PhaseInfo }) {
           <div
             className={cn(
               'relative flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all duration-500',
-              isDone && 'border-green-500 bg-green-500/10 text-green-500 shadow-[0_0_12px_rgba(34,197,94,0.2)]',
-              isRunning && 'border-yellow-500 bg-yellow-500/10 text-yellow-500 shadow-[0_0_12px_rgba(234,179,8,0.2)]',
-              isFailed && 'border-red-500 bg-red-500/10 text-red-500 shadow-[0_0_12px_rgba(239,68,68,0.2)]',
+              isDone && 'border-chart-4 bg-chart-4/10 text-chart-4',
+              isRunning && 'border-secondary bg-secondary/10 text-secondary',
+              isFailed && 'border-destructive bg-destructive/10 text-destructive',
               !isDone && !isRunning && !isFailed && 'border-muted-foreground/20 bg-muted/50 text-muted-foreground'
             )}
           >
             {isRunning && (
-              <span className="absolute inset-0 rounded-full animate-ping border-2 border-yellow-500/30" />
+              <span className="absolute inset-0 rounded-full animate-ping border-2 border-secondary/30" />
             )}
             {isDone ? (
               <Check className="h-5 w-5" />
@@ -43,9 +43,9 @@ function PhaseStep({ phase }: { phase: PhaseInfo }) {
           <span
             className={cn(
               'absolute top-full mt-2.5 text-xs font-medium whitespace-nowrap',
-              isDone && 'text-green-500',
-              isRunning && 'text-yellow-500 font-semibold',
-              isFailed && 'text-red-500 font-semibold',
+              isDone && 'text-chart-4',
+              isRunning && 'text-secondary font-semibold',
+              isFailed && 'text-destructive font-semibold',
               !isDone && !isRunning && !isFailed && 'text-muted-foreground/60'
             )}
           >
@@ -67,7 +67,7 @@ function Connector({ done, active }: { done: boolean; active: boolean }) {
         <div
           className={cn(
             'absolute inset-y-0 left-0 rounded-full transition-all duration-700',
-            done ? 'bg-green-500 w-full' : active ? 'bg-yellow-500 w-1/2 animate-pulse' : 'w-0'
+            done ? 'bg-chart-4 w-full' : active ? 'bg-secondary w-1/2 animate-pulse' : 'w-0'
           )}
         />
       </div>

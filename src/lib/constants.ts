@@ -92,16 +92,16 @@ export const LogAction = {
 export type LogActionValue = (typeof LogAction)[keyof typeof LogAction];
 
 export const ACTION_STYLES: Record<string, string> = {
-  [LogAction.Start]: 'bg-cyan-500/10 text-cyan-500 border-cyan-500/20',
-  [LogAction.ToolUse]: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-  [LogAction.Complete]: 'bg-green-500/10 text-green-500 border-green-500/20',
-  [LogAction.SessionEnd]: 'bg-green-500/10 text-green-500 border-green-500/20',
-  [LogAction.Error]: 'bg-red-500/10 text-red-500 border-red-500/20',
-  [LogAction.Config]: 'bg-violet-500/10 text-violet-500 border-violet-500/20',
-  [LogAction.Git]: 'bg-orange-500/10 text-orange-500 border-orange-500/20',
+  [LogAction.Start]: 'bg-chart-3 text-white border-border',
+  [LogAction.ToolUse]: 'bg-chart-2 text-black border-border',
+  [LogAction.Complete]: 'bg-chart-4 text-black border-border',
+  [LogAction.SessionEnd]: 'bg-chart-4 text-black border-border',
+  [LogAction.Error]: 'bg-destructive text-destructive-foreground dark:text-white border-border',
+  [LogAction.Config]: 'bg-primary text-primary-foreground dark:text-white border-border',
+  [LogAction.Git]: 'bg-primary text-primary-foreground dark:text-white border-border',
 };
 
-export const DEFAULT_ACTION_STYLE = 'bg-muted text-muted-foreground';
+export const DEFAULT_ACTION_STYLE = 'bg-muted text-muted-foreground border-border';
 
 // ─── Tool Names ─────────────────────────────────────────────────────────────
 
@@ -126,16 +126,16 @@ export const PHASE_ACCORDION_PREFIX = 'phase-';
 // ─── Run Status Styles ──────────────────────────────────────────────────────
 
 export const RUN_STATUS_BADGE_STYLES: Record<RunSummary['status'], string> = {
-  running: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-  completed: 'bg-green-500/10 text-green-500 border-green-500/20',
-  failed: 'bg-red-500/10 text-red-500 border-red-500/20',
+  running: 'bg-secondary text-secondary-foreground border-border',
+  completed: 'bg-chart-4 text-black border-border',
+  failed: 'bg-destructive text-destructive-foreground dark:text-white border-border',
   pending: 'bg-muted text-muted-foreground border-border',
 };
 
 export const RUN_STATUS_COLORS: Record<RunSummary['status'], string> = {
-  running: 'text-yellow-500',
-  completed: 'text-green-500',
-  failed: 'text-red-500',
+  running: 'text-primary',
+  completed: 'text-chart-4',
+  failed: 'text-destructive',
   pending: 'text-muted-foreground',
 };
 
@@ -147,20 +147,28 @@ export const TASK_STATUS_CONFIG: Record<
 > = {
   completed: {
     label: 'Completed',
-    variant: 'default',
-    className: 'bg-green-500/10 text-green-500 border-green-500/20',
+    variant: 'outline',
+    className: 'bg-chart-4 text-black border-border',
   },
   in_progress: {
     label: 'Running',
-    variant: 'default',
-    className: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+    variant: 'outline',
+    className: 'bg-secondary text-secondary-foreground border-border',
   },
-  pending: { label: 'Pending', variant: 'secondary', className: '' },
-  failed: { label: 'Failed', variant: 'destructive', className: '' },
+  pending: {
+    label: 'Pending',
+    variant: 'outline',
+    className: 'bg-muted text-muted-foreground border-border',
+  },
+  failed: {
+    label: 'Failed',
+    variant: 'outline',
+    className: 'bg-destructive text-destructive-foreground dark:text-white border-border',
+  },
   blocked: {
     label: 'Blocked',
     variant: 'outline',
-    className: 'text-orange-500 border-orange-500/30',
+    className: 'bg-secondary text-secondary-foreground border-border',
   },
 };
 
@@ -175,26 +183,26 @@ export const TASK_STATUS_ORDER: Record<TaskStatus, number> = {
 // ─── Phase Status Styles ────────────────────────────────────────────────────
 
 export const PHASE_STATUS_ICON_STYLES: Record<string, string> = {
-  done: 'text-green-500',
-  running: 'text-yellow-500 animate-spin',
+  done: 'text-chart-4',
+  running: 'text-primary animate-spin',
   pending: 'text-muted-foreground',
-  failed: 'text-red-500',
+  failed: 'text-destructive',
 };
 
 export const PHASE_STATUS_BADGE_STYLES: Record<string, string> = {
-  done: 'bg-green-500/10 text-green-500 border-green-500/20',
-  running: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-  failed: 'bg-red-500/10 text-red-500 border-red-500/20',
-  pending: 'bg-muted text-muted-foreground',
+  done: 'bg-chart-4 text-black border-border',
+  running: 'bg-secondary text-secondary-foreground border-border',
+  failed: 'bg-destructive text-destructive-foreground dark:text-white border-border',
+  pending: 'bg-muted text-muted-foreground border-border',
 };
 
 // ─── Run Status Header Styles ───────────────────────────────────────────────
 
 export const RUN_HEADER_STATUS_STYLES: Record<string, string> = {
-  running: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-  completed: 'bg-green-500/10 text-green-500 border-green-500/20',
-  failed: 'bg-red-500/10 text-red-500 border-red-500/20',
-  pending: 'bg-muted text-muted-foreground',
+  running: 'bg-secondary text-secondary-foreground border-border',
+  completed: 'bg-chart-4 text-black border-border',
+  failed: 'bg-destructive text-destructive-foreground dark:text-white border-border',
+  pending: 'bg-muted text-muted-foreground border-border',
 };
 
 // ─── Phase Status → Task Status ─────────────────────────────────────────────

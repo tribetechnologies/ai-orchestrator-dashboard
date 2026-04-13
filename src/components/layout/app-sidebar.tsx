@@ -72,7 +72,7 @@ function ProjectRuns({ project, selectedRun, onSelectRun, onRemove }: ProjectRun
                 <SidebarMenuButton
                   isActive={selectedRun === run.ticketId}
                   onClick={() => onSelectRun(project.id, run.ticketId)}
-                  className="flex items-start gap-2 py-2 h-auto hover:bg-muted data-active:bg-muted-foreground/5 data-active:text-sidebar-foreground data-active:border data-active:border-border"
+                  className="flex items-start gap-2 py-2 h-auto border border-transparent dark:bg-muted/40 hover:bg-muted-foreground/10 hover:border-border/50 data-active:bg-muted-foreground/10 data-active:border-border"
                 >
                   <StatusIcon className={`h-4 w-4 mt-0.5 shrink-0 ${statusColor} ${run.status === 'running' ? 'animate-spin' : ''}`} />
                   <div className="flex-1 min-w-0">
@@ -87,7 +87,7 @@ function ProjectRuns({ project, selectedRun, onSelectRun, onRemove }: ProjectRun
                       <span className="text-[10px] text-muted-foreground">
                         {formatRelativeTime(run.startedAt)}
                       </span>
-                      <span className="text-[10px] text-foreground font-medium ml-auto">
+                      <span className="text-[10px] font-medium ml-auto">
                         {formatCost(run.totalCostUsd)}
                       </span>
                     </div>

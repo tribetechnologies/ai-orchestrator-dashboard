@@ -103,21 +103,23 @@ export function RunDetail({ projectId, ticketId }: RunDetailProps) {
           <Badge variant="outline" className={`text-xs ${statusStyle[runStatus] ?? ''}`}>
             {isRunning && (
               <span className="relative flex h-2 w-2 mr-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-yellow-500" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-chart-4 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-chart-4" />
               </span>
             )}
-            {capitalize(runStatus)}
+            {isRunning ? 'Running' : capitalize(runStatus)}
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground w-1/2">{detail.state.description}</p>
           {detail.state.branch && (
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono">
-              <GitBranch className="h-3 w-3" />
-              {detail.state.branch}
-              {detail.state.baseBranch && (
-                <span className="text-muted-foreground/60"> from {detail.state.baseBranch}</span>
-              )}
+            <div className="flex items-center gap-1.5 mt-4">
+              <Badge variant="outline" className="bg-muted text-muted-foreground border-border text-sm font-sans gap-1.5 py-1 px-3">
+                <GitBranch className="h-3.5 w-3.5" />
+                {detail.state.branch}
+                {detail.state.baseBranch && (
+                  <span className="text-muted-foreground/60"> from {detail.state.baseBranch}</span>
+                )}
+              </Badge>
             </div>
           )}
       </div>

@@ -24,7 +24,12 @@ export function usePolling<T>(
   }, []);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      setData(null);
+      setError(null);
+      setLoading(true);
+      return;
+    }
     doFetch();
     const interval = setInterval(doFetch, POLL_INTERVAL_MS);
     return () => clearInterval(interval);

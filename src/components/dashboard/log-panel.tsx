@@ -66,12 +66,12 @@ function ToolUseRow({ entry, nextEntry }: { entry: LogEntry; nextEntry?: LogEntr
       : undefined);
 
   return (
-    <div className="border-l-2 border-yellow-500/40 ml-4 py-1 bg-yellow-500/[0.03] rounded-r-md">
+    <div className="border-l-2 border-chart-2/40 ml-4 py-1 bg-chart-2/10 rounded-r-md">
       <button
         onClick={() => setExpanded(!expanded)}
         className={cn(
           'flex w-full items-center gap-2 px-3 py-1.5 text-sm transition-colors rounded-r-md',
-          'hover:bg-yellow-500/5 text-left group'
+          'hover:bg-chart-2/15 text-left group'
         )}
       >
         <ChevronRight
@@ -80,8 +80,8 @@ function ToolUseRow({ entry, nextEntry }: { entry: LogEntry; nextEntry?: LogEntr
             expanded && 'rotate-90'
           )}
         />
-        <Icon className="h-3.5 w-3.5 text-yellow-500 shrink-0" />
-        <span className="font-mono text-xs font-medium text-yellow-500">{toolName}</span>
+        <Icon className="h-3.5 w-3.5 text-secondary-foreground dark:text-foreground shrink-0" />
+        <span className="font-mono text-xs font-medium text-secondary-foreground dark:text-foreground">{toolName}</span>
         {durationMs != null && durationMs > 0 && (
           <span className="text-[10px] text-muted-foreground ml-auto font-mono">
             {durationMs < TOOL_DURATION_MS_THRESHOLD ? `${durationMs}ms` : formatDuration(durationMs)}
@@ -94,7 +94,7 @@ function ToolUseRow({ entry, nextEntry }: { entry: LogEntry; nextEntry?: LogEntr
         )}
       </button>
       {expanded && (
-        <div className="px-4 py-2 ml-5 text-xs text-muted-foreground font-mono bg-yellow-500/10 rounded-md mx-3 mt-1">
+        <div className="px-4 py-2 ml-5 text-xs text-muted-foreground font-mono bg-chart-2/20 rounded-md mx-3 mt-1">
           <p>Agent: {entry.agentName}</p>
           <p className="mt-1">Time: {formatTime(entry.timestamp)}</p>
         </div>
@@ -112,18 +112,18 @@ const ACCENT_STYLES: Record<
   { border: string; bg: string; hover: string; text: string; expandedBg: string }
 > = {
   start: {
-    border: 'border-cyan-500/40',
-    bg: 'bg-cyan-500/[0.03]',
-    hover: 'hover:bg-cyan-500/5',
-    text: 'text-cyan-500',
-    expandedBg: 'bg-cyan-500/10',
+    border: 'border-chart-3/40',
+    bg: 'bg-chart-3/10',
+    hover: 'hover:bg-chart-3/15',
+    text: 'text-chart-3',
+    expandedBg: 'bg-chart-3/20',
   },
   complete: {
-    border: 'border-green-500/40',
-    bg: 'bg-green-500/[0.03]',
-    hover: 'hover:bg-green-500/5',
-    text: 'text-green-500',
-    expandedBg: 'bg-green-500/10',
+    border: 'border-chart-4/40',
+    bg: 'bg-chart-4/10',
+    hover: 'hover:bg-chart-4/15',
+    text: 'text-chart-4',
+    expandedBg: 'bg-chart-4/20',
   },
 };
 
@@ -194,13 +194,13 @@ function StandardLogRow({ entry }: { entry: LogEntry }) {
           : MessageSquare;
 
   const iconColor = isComplete
-    ? 'text-green-500'
+    ? 'text-secondary-foreground dark:text-foreground'
     : isError
-      ? 'text-red-500'
+      ? 'text-destructive'
       : isStart
-        ? 'text-cyan-500'
+        ? 'text-secondary-foreground dark:text-foreground'
         : isGit
-          ? 'text-orange-500'
+          ? 'text-primary'
           : 'text-muted-foreground';
 
   return (
