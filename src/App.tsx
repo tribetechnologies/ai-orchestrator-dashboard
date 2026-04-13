@@ -27,6 +27,13 @@ export default function App() {
     setSelectedRunId(ticketId);
   };
 
+  const handleProjectRemoved = (projectId: string) => {
+    if (selectedProjectId === projectId) {
+      setSelectedProjectId(null);
+      setSelectedRunId(null);
+    }
+  };
+
   return (
     <TooltipProvider>
       <SidebarProvider>
@@ -35,6 +42,7 @@ export default function App() {
             selectedProjectId={selectedProjectId}
             selectedRunId={selectedRunId}
             onSelectRun={handleSelectRun}
+            onProjectRemoved={handleProjectRemoved}
           />
           <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
             <Header />

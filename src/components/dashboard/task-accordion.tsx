@@ -74,7 +74,7 @@ function TaskRow({ task, onSelect }: TaskRowProps) {
       onClick={() => onSelect(task.id)}
       className={cn(
         'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors',
-        'bg-muted/80 hover:bg-accent-foreground/5 border border-border/40 transition-colors duration-200'
+        'bg-muted hover:bg-muted-foreground/10 border border-border/40 transition-colors duration-200'
       )}
     >
       <div className="flex-1 min-w-0">
@@ -198,14 +198,14 @@ export function TaskAccordion({ phases, steps, tasks, agents, onSelectTask, onSe
                   onClick={() => onSelectPhase(phase.stepId ?? phase.label)}
                   className={cn(
                     'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors',
-                    'bg-muted/80 hover:bg-accent-foreground/5 border border-border/40 transition-colors duration-200'
+                    'bg-muted hover:bg-muted-foreground/10 border border-border/40 transition-colors duration-200'
                   )}
                 >
                   <div className="flex-1 min-w-0">
                     <span className="truncate">{mainTask.title}</span>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <TaskStatusBadge status={mainTask.status} />
+                    <TaskStatusDot status={mainTask.status} />
                     <span className="w-14 text-xs text-foreground tabular-nums font-semibold">
                       {formatCost(mainTask.cost)}
                     </span>

@@ -23,6 +23,16 @@ export function usePolling<T>(
     }
   }, []);
 
+  // Reset state when fetcher identity changes (e.g. switching runs)
+  const prevFetcherRef = useRef(fetcher);
+  useEffect(() => {
+    if (prevFetcherRef.current !== fetcher) {
+      prevFetcherRef.current = fetcher;
+      setData(null);
+      setLoading(true);
+    }
+  }, [fetcher]);
+
   useEffect(() => {
     if (!enabled) {
       setData(null);
@@ -33,7 +43,7 @@ export function usePolling<T>(
     doFetch();
     const interval = setInterval(doFetch, POLL_INTERVAL_MS);
     return () => clearInterval(interval);
-  }, [enabled, doFetch]);
+  }, [enabled, doFetch, fetcher]);
 
   return { data, error, loading, refresh: doFetch };
 }

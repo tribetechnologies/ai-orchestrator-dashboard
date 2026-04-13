@@ -11,7 +11,7 @@ import { fetchRunDetail, fetchTaskLogs, fetchPhaseLogs } from '@/lib/api';
 import { RUN_HEADER_STATUS_STYLES } from '@/lib/constants';
 import { capitalize } from '@/lib/format';
 import type { LogEntry, RunDetailProps, LogTarget } from '@/lib/types';
-import { GitBranch } from 'lucide-react';
+import { GitBranch, Loader2 } from 'lucide-react';
 
 export function RunDetail({ projectId, ticketId }: RunDetailProps) {
   const [logTarget, setLogTarget] = useState<LogTarget>(null);
@@ -64,8 +64,9 @@ export function RunDetail({ projectId, ticketId }: RunDetailProps) {
 
   if (loading && !detail) {
     return (
-      <div className="flex items-center justify-center h-full">
-        <span className="text-muted-foreground">Loading run details...</span>
+      <div className="flex flex-col items-center justify-center h-full gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">Loading run details...</span>
       </div>
     );
   }

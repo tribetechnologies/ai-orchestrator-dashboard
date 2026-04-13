@@ -72,11 +72,11 @@ function ProjectRuns({ project, selectedRun, onSelectRun, onRemove }: ProjectRun
                 <SidebarMenuButton
                   isActive={selectedRun === run.ticketId}
                   onClick={() => onSelectRun(project.id, run.ticketId)}
-                  className="flex items-start gap-2 py-2 h-auto border border-transparent dark:bg-muted/40 hover:bg-muted-foreground/10 hover:border-border/50 data-active:bg-muted-foreground/10 data-active:border-border"
+                  className="flex items-start gap-2 py-2 h-auto border border-transparent dark:bg-muted/40 hover:bg-muted-foreground/10 dark:hover:bg-muted-foreground/20 data-active:bg-muted-foreground/10 dark:data-active:bg-muted-foreground/30 data-active:border-border"
                 >
                   <StatusIcon className={`h-4 w-4 mt-0.5 shrink-0 ${statusColor} ${run.status === 'running' ? 'animate-spin' : ''}`} />
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-sm truncate">{run.ticketId}</div>
+                    <div className="font-semibold text-sm truncate">{run.ticketId}</div>
                     <div className="text-xs text-muted-foreground truncate">
                       {run.description}
                     </div>
@@ -87,7 +87,7 @@ function ProjectRuns({ project, selectedRun, onSelectRun, onRemove }: ProjectRun
                       <span className="text-[10px] text-muted-foreground">
                         {formatRelativeTime(run.startedAt)}
                       </span>
-                      <span className="text-[10px] font-medium ml-auto">
+                      <span className="text-xs font-semibold ml-auto">
                         {formatCost(run.totalCostUsd)}
                       </span>
                     </div>
@@ -107,7 +107,7 @@ function ProjectRuns({ project, selectedRun, onSelectRun, onRemove }: ProjectRun
 
 // ─── Main Sidebar ───────────────────────────────────────────────────────────
 
-export function AppSidebar({ selectedProjectId, selectedRunId, onSelectRun }: AppSidebarProps) {
+export function AppSidebar({ selectedProjectId, selectedRunId, onSelectRun, onProjectRemoved }: AppSidebarProps) {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const { data: projects, refresh } = usePolling(fetchProjects);
@@ -124,9 +124,11 @@ export function AppSidebar({ selectedProjectId, selectedRunId, onSelectRun }: Ap
 
   const confirmRemoveProject = async () => {
     if (!projectToDelete) return;
-    await removeProject(projectToDelete.id);
+    const removedId = projectToDelete.id;
+    await removeProject(removedId);
     setProjectToDelete(null);
     refresh();
+    onProjectRemoved(removedId);
   };
 
   return (
@@ -199,7 +201,7 @@ export function AppSidebar({ selectedProjectId, selectedRunId, onSelectRun }: Ap
             <Button variant="outline" onClick={() => setProjectToDelete(null)}>
               Cancel
             </Button>
-            <Button variant="destructive" onClick={confirmRemoveProject}>
+            <Button onClick={confirmRemoveProject}>
               Delete
             </Button>
           </DialogFooter>

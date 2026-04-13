@@ -195,6 +195,7 @@ export interface AppSidebarProps {
   selectedProjectId: string | null;
   selectedRunId: string | null;
   onSelectRun: (projectId: string, ticketId: string) => void;
+  onProjectRemoved: (projectId: string) => void;
 }
 
 export interface DirectoryBrowserProps {
