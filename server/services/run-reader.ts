@@ -123,6 +123,7 @@ function normalizeRunState(raw: RawRunState): RunState {
     startedAt: raw.pipelineStartedAt,
     completedAt: raw.pipelineCompletedAt,
     totalCostUsd: raw.totalCostUsd ?? 0,
+    totalTokenUsage: raw.totalTokenUsage,
   };
 }
 

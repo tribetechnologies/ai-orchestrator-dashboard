@@ -14,14 +14,26 @@ import type { StatCardsProps } from '@/lib/types';
 
 export function StatCards({ detail }: StatCardsProps) {
   const { state, totalBudget } = detail;
-  const completed = state.tasks.filter((t) => t.status === 'completed').length;
-  const failed = state.tasks.filter((t) => t.status === 'failed').length;
-  const total = state.tasks.length;
+  // Phases that don't fan out into subtasks still count as a single unit of
+  // work — so a step with no tasks contributes 1 to the total (and to the
+  // completed/failed buckets when it reaches a terminal status).
+  const stepsWithoutTasks = state.steps.filter((s) => !s.tasks || s.tasks.length === 0);
+  const completed =
+    state.tasks.filter((t) => t.status === 'completed').length +
+    stepsWithoutTasks.filter((s) => s.status === 'completed').length;
+  const failed =
+    state.tasks.filter((t) => t.status === 'failed').length +
+    stepsWithoutTasks.filter((s) => s.status === 'failed').length;
+  const total = state.tasks.length + stepsWithoutTasks.length;
   const budgetPct = totalBudget > 0 ? state.totalCostUsd / totalBudget : 0;
   const budgetColor = STAT_COLORS.budget;
 
-  const totalInput = state.tasks.reduce((s, t) => s + (t.tokenUsage?.inputTokens ?? 0), 0);
-  const totalOutput = state.tasks.reduce((s, t) => s + (t.tokenUsage?.outputTokens ?? 0), 0);
+  const totalInput =
+    state.totalTokenUsage?.inputTokens ??
+    state.tasks.reduce((s, t) => s + (t.tokenUsage?.inputTokens ?? 0), 0);
+  const totalOutput =
+    state.totalTokenUsage?.outputTokens ??
+    state.tasks.reduce((s, t) => s + (t.tokenUsage?.outputTokens ?? 0), 0);
 
   return (
     <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">

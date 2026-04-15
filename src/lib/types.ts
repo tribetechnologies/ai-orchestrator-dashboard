@@ -52,6 +52,7 @@ export interface RunState {
   startedAt: string;
   completedAt?: string;
   totalCostUsd: number;
+  totalTokenUsage?: TokenUsage;
 }
 
 export interface LogEntry {

@@ -58,6 +58,7 @@ export interface RawRunState {
   pipelineStartedAt: string;
   pipelineCompletedAt?: string;
   totalCostUsd: number;
+  totalTokenUsage?: TokenUsage;
   steps: PipelineStepState[];
 }
 
@@ -79,6 +80,7 @@ export interface RunState {
   startedAt: string;
   completedAt?: string;
   totalCostUsd: number;
+  totalTokenUsage?: TokenUsage;
 }
 
 export interface LogEntry {
