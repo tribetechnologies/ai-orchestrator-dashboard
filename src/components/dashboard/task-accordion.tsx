@@ -5,6 +5,12 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { CircularProgress } from './circular-progress';
 import { cn } from '@/lib/utils';
 import { formatCost, capitalize } from '@/lib/format';
 import {
@@ -14,6 +20,8 @@ import {
   PHASE_TO_TASK_STATUS,
   PhaseStatusValue,
   STEP_ACCORDION_PREFIX,
+  TASK_BUDGET_CIRCULAR_SIZE,
+  TASK_BUDGET_CIRCULAR_STROKE,
   TASK_STATUS_ORDER,
   TaskStatusValue,
 } from '@/lib/constants';
@@ -74,12 +82,56 @@ const PHASE_STATUS_ICONS: Record<string, React.ElementType> = {
 
 const DEFAULT_PHASE_ICON = Clock;
 
+// ─── Task Budget Ring ───────────────────────────────────────────────────────
+
+const TASK_BUDGET_RING_COLOR = 'hsl(43 96% 56%)';
+
+/**
+ * Small ring showing a task's cost as a fraction of its per-task budget.
+ * Hover reveals a tooltip with the raw cost / budget numbers.
+ */
+function TaskBudgetRing({ cost, maxBudget }: { cost: number; maxBudget: number }) {
+  const pct = maxBudget > 0 ? cost / maxBudget : 0;
+  const pctLabel = `${Math.round(Math.min(pct, 1) * 100)}%`;
+
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <span
+            className="inline-flex shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CircularProgress
+              value={cost}
+              max={maxBudget || 1}
+              size={TASK_BUDGET_CIRCULAR_SIZE}
+              strokeWidth={TASK_BUDGET_CIRCULAR_STROKE}
+              color={TASK_BUDGET_RING_COLOR}
+              display=""
+            />
+          </span>
+        }
+      />
+      <TooltipContent>
+        <div className="space-y-0.5">
+          <div className="font-semibold">Task budget</div>
+          <div>
+            {formatCost(cost)} of {formatCost(maxBudget)} ({pctLabel})
+          </div>
+        </div>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
 // ─── Task Row ───────────────────────────────────────────────────────────────
 
 /** A single task row inside an expanded phase accordion. */
-function TaskRow({ task, onSelect }: TaskRowProps) {
+function TaskRow({ task, maxBudgetPerTask, onSelect }: TaskRowProps) {
   const handleClick = () => onSelect(task.id);
   const hasBlockers = task.blockedBy.length > 0;
+  const cost = task.tokenUsage?.costUsd ?? 0;
 
   return (
     <button onClick={handleClick} className={TASK_ROW_CLASSES}>
@@ -94,10 +146,9 @@ function TaskRow({ task, onSelect }: TaskRowProps) {
         )}
       </div>
       <div className="flex items-center gap-3 shrink-0">
+        <TaskBudgetRing cost={cost} maxBudget={maxBudgetPerTask} />
         <TaskStatusDot status={task.status} />
-        <span className={COST_LABEL_CLASSES}>
-          {formatCost(task.tokenUsage?.costUsd ?? 0)}
-        </span>
+        <span className={COST_LABEL_CLASSES}>{formatCost(cost)}</span>
       </div>
       <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
     </button>
@@ -107,13 +158,22 @@ function TaskRow({ task, onSelect }: TaskRowProps) {
 // ─── Phase Main Task Row (for phases without subtasks) ──────────────────────
 
 /** Row shown for phases that have no individual subtasks. */
-function PhaseMainTaskRow({ task, onSelect }: { task: PhaseTaskRow; onSelect: () => void }) {
+function PhaseMainTaskRow({
+  task,
+  maxBudgetPerTask,
+  onSelect,
+}: {
+  task: PhaseTaskRow;
+  maxBudgetPerTask: number;
+  onSelect: () => void;
+}) {
   return (
     <button onClick={onSelect} className={TASK_ROW_CLASSES}>
       <div className="flex-1 min-w-0">
         <span className="truncate">{task.title}</span>
       </div>
       <div className="flex items-center gap-3 shrink-0">
+        <TaskBudgetRing cost={task.cost} maxBudget={maxBudgetPerTask} />
         <TaskStatusDot status={task.status} />
         <span className={COST_LABEL_CLASSES}>
           {formatCost(task.cost)}
@@ -176,7 +236,7 @@ function getPhaseMainTask(phase: PhaseInfo, cost: number): PhaseTaskRow {
 
 // ─── Main Phase Task Accordion ──────────────────────────────────────────────
 
-export function TaskAccordion({ phases, steps, tasks, agents, onSelectTask, onSelectPhase }: TaskAccordionProps) {
+export function TaskAccordion({ phases, steps, tasks, agents, maxBudgetPerTask, onSelectTask, onSelectPhase }: TaskAccordionProps) {
   const stepTasksMap = buildStepTasksMap(steps);
 
   // Auto-expand phases that have subtasks
@@ -242,13 +302,19 @@ export function TaskAccordion({ phases, steps, tasks, agents, onSelectTask, onSe
                     </p>
                   ) : (
                     phaseTasks.map((task) => (
-                      <TaskRow key={task.id} task={task} onSelect={onSelectTask} />
+                      <TaskRow
+                        key={task.id}
+                        task={task}
+                        maxBudgetPerTask={maxBudgetPerTask}
+                        onSelect={onSelectTask}
+                      />
                     ))
                   )}
                 </div>
               ) : mainTask ? (
                 <PhaseMainTaskRow
                   task={mainTask}
+                  maxBudgetPerTask={maxBudgetPerTask}
                   onSelect={() => onSelectPhase(phase.stepId ?? phase.label)}
                 />
               ) : null}

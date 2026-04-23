@@ -62,6 +62,10 @@ export interface RawRunState {
   totalCostUsd: number;
   totalTokenUsage?: TokenUsage;
   steps: PipelineStepState[];
+  /** Overall budget for the whole run, in USD. */
+  totalBudgetUsd?: number;
+  /** Per-task spend cap, in USD. */
+  maxBudgetPerTaskUsd?: number;
 }
 
 /**
@@ -143,6 +147,8 @@ export interface RunDetail {
   agents: AgentInfo[];
   recentLogs: LogEntry[];
   totalBudget: number;
+  /** Per-task spend cap, in USD — used for per-task budget visuals. */
+  maxBudgetPerTask: number;
 }
 
 export interface DirectoryEntry {

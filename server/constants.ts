@@ -29,6 +29,7 @@ export const FILE_ENCODING = 'utf-8' as const;
 // ─── Run Reader ─────────────────────────────────────────────────────────────
 
 export const DEFAULT_BUDGET = 20;
+export const DEFAULT_MAX_BUDGET_PER_TASK = 3;
 export const RECENT_LOG_COUNT = 20;
 export const PER_FILE_TAIL_COUNT = 20;
 

@@ -27,9 +27,9 @@ export function CircularProgress({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={STAT_COLORS.mutedStroke}
+          stroke="currentColor"
           strokeWidth={strokeWidth}
-          opacity={0.5}
+          className="text-muted-foreground/25"
         />
         <circle
           cx={size / 2}
@@ -44,9 +44,11 @@ export function CircularProgress({
           className="transition-[stroke-dashoffset] duration-700 ease-out"
         />
       </svg>
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-base font-bold tabular-nums">{display ?? `${value}/${max}`}</span>
-      </div>
+      {display !== '' && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-base font-bold tabular-nums">{display ?? `${value}/${max}`}</span>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,6 +20,7 @@ import {
   AgentStatusValue,
   DEFAULT_BASE_BRANCH,
   DEFAULT_BUDGET,
+  DEFAULT_MAX_BUDGET_PER_TASK,
   DEFAULT_DESCRIPTION,
   FILE_ENCODING,
   GIT_BRANCH_PATTERN,
@@ -465,7 +466,8 @@ export function getRunDetail(runsPath: string, ticketId: string): RunDetail | nu
     phases,
     agents: buildAgents(logsDir),
     recentLogs: buildRecentLogs(logsDir, RECENT_LOG_COUNT),
-    totalBudget: DEFAULT_BUDGET,
+    totalBudget: raw.totalBudgetUsd ?? DEFAULT_BUDGET,
+    maxBudgetPerTask: raw.maxBudgetPerTaskUsd ?? DEFAULT_MAX_BUDGET_PER_TASK,
   };
 }
 

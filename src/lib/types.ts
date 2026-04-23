@@ -113,6 +113,8 @@ export interface RunDetail {
   agents: AgentInfo[];
   recentLogs: LogEntry[];
   totalBudget: number;
+  /** Per-task spend cap, in USD — used for per-task budget visuals. */
+  maxBudgetPerTask: number;
 }
 
 export interface ContextFile {
@@ -183,6 +185,7 @@ export interface LogPanelProps {
 
 export interface TaskRowProps {
   task: AgentTask;
+  maxBudgetPerTask: number;
   onSelect: (taskId: string) => void;
 }
 
@@ -198,6 +201,7 @@ export interface TaskAccordionProps {
   steps: PipelineStepState[];
   tasks: AgentTask[];
   agents: AgentInfo[];
+  maxBudgetPerTask: number;
   onSelectTask: (taskId: string) => void;
   onSelectPhase: (phase: string) => void;
 }

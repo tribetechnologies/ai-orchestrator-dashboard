@@ -43,6 +43,8 @@ export const CIRCULAR_PROGRESS_DEFAULT_SIZE = 80;
 export const CIRCULAR_PROGRESS_DEFAULT_STROKE = 6;
 export const STAT_CIRCULAR_SIZE = 88;
 export const STAT_CIRCULAR_STROKE = 7;
+export const TASK_BUDGET_CIRCULAR_SIZE = 20;
+export const TASK_BUDGET_CIRCULAR_STROKE = 4;
 
 // ─── Stat Card Colors ───────────────────────────────────────────────────────
 

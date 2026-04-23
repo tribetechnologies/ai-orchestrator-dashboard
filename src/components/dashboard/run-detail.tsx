@@ -281,6 +281,7 @@ export function RunDetail({ projectId, ticketId }: RunDetailProps) {
             steps={detail.state.steps}
             tasks={detail.state.tasks}
             agents={detail.agents}
+            maxBudgetPerTask={detail.maxBudgetPerTask}
             onSelectTask={loadTaskLogs}
             onSelectPhase={loadPhaseLogs}
           />
