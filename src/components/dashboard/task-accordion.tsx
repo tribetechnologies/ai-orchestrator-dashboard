@@ -137,11 +137,14 @@ function TaskRow({ task, maxBudgetPerTask, onSelect }: TaskRowProps) {
     <button onClick={handleClick} className={TASK_ROW_CLASSES}>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="truncate">{task.title}</span>
+          <span className="truncate">
+            {task.title}
+            <span className="text-muted-foreground"> ({task.assignedAgent ?? `worker-${task.id}`})</span>
+          </span>
         </div>
         {hasBlockers && (
           <p className="text-xs text-muted-foreground mt-0.5">
-            Blocked by: {task.blockedBy.join(', ')}
+            Blocked by: {task.blockedBy.map((id) => `worker-${id}`).join(', ')}
           </p>
         )}
       </div>
